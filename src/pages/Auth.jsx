@@ -1,13 +1,68 @@
-import React from "react";
-import { Layout, Row, Col, Typography, Button, Card, Form, Input } from "antd";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Layout, Row, Col, Typography, Button, Card, Form, Input, notification } from "antd";
+import { loginAPI } from "../service/allApi";
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
 
 function Auth() {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const { email, password } = userData;
+
+    if (!email || !password) {
+      notification.info({
+        message: "Missing Fields",
+        description: "Please fill in all fields.",
+      });
+      return;
+    }
+
+    try {
+      // API call to login
+      const result = await loginAPI({ email, password });
+
+      if (result.status === 200) {
+        const { username, token, role } = result.data.existingUser;
+
+       //store data in session storage
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("token", token);
+       
+
+        notification.success({
+          message: "Login Successful",
+          description: `Welcome back, ${username}!`,
+        });
+
+        setUserData({ email: "", password: "" });
+       
+        if (role === "Admin") navigate("/admin");
+        else if (role === "Manager") navigate("/manager");
+        else navigate("/employee");
+      } else {
+        notification.warning({ message: "Login Failed", description: result.response?.data?.message || "Try again." });
+      }
 
 
 
+    } catch (err) {
+      console.error("Login Error:", err);
+      notification.error({
+        message: "Error",
+        description: "Something went wrong. Please try again later.",
+      });
+    }
+  };
 
   return (
     <Layout
@@ -48,7 +103,7 @@ function Auth() {
                 textAlign: "center",
               }}
             >
-              <Title level={2} >WELCOME BACK</Title>
+              <Title level={2}>WELCOME BACK</Title>
               <Paragraph>Sign In to Your Team Workspace</Paragraph>
 
               {/* Login Form */}
@@ -62,23 +117,27 @@ function Auth() {
                     { type: "email", message: "Enter a valid email!" },
                   ]}
                 >
-                  <Input placeholder="Enter your email" />
+                  <Input
+                    placeholder="Enter your email"
+                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                  />
                 </Form.Item>
 
                 {/* Password Input */}
                 <Form.Item
                   label="Password"
                   name="password"
-                  rules={[
-                    { required: true, message: "Please enter your password!"  },
-                  ]}
+                  rules={[{ required: true, message: "Please enter your password!" }]}
                 >
-                  <Input.Password placeholder="Enter your password"  />
+                  <Input.Password
+                    placeholder="Enter your password"
+                    onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+                  />
                 </Form.Item>
 
                 {/* Login Button */}
                 <Form.Item>
-                  <Button type="primary" size="large" block>
+                  <Button type="primary" size="large" block onClick={handleLogin}>
                     Login
                   </Button>
                 </Form.Item>
