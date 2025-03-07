@@ -32,16 +32,17 @@ function Auth() {
       const result = await loginAPI({ email, password });
 
       if (result.status === 200) {
-        const { username, token, role } = result.data.existingUser;
+        const { name, role } = result.data.existingUser;
+        const  token  = result.data.token;
 
        //store data in session storage
-        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("name", name);
         sessionStorage.setItem("token", token);
        
 
         notification.success({
           message: "Login Successful",
-          description: `Welcome back, ${username}!`,
+          description: `Welcome back, ${name}!`,
         });
 
         setUserData({ email: "", password: "" });

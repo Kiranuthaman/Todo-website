@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Card, Typography, Button } from 'antd';
 import AddEmploye from '../components/AddEmploye';
 import SideBar from '../components/SideBar';
 import AddManager from '../components/AddManager';
 
+
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
 const AdminDashboard = () => {
+ 
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <SideBar />
@@ -39,22 +42,23 @@ const AdminDashboard = () => {
               <AddManager/>
             </div>
           </Card>
-
+        
           <Card title="Employee List" style={{ marginBottom: '24px' }}>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-              <li>KIRAN</li>
-              <li>RINO</li>
-              <li>DEVU</li>
+              <li>kiran</li>
+              
             </ul>
           </Card>
+          
+
 
           <Card title="Manager List">
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-              <li>KIRAN</li>
-              <li>RINO</li>
-              <li>DEVU</li>
+              <li>kiran</li>
+             
             </ul>
-          </Card>
+            </Card>
+
         </Content>
       </Layout>
     </Layout>
