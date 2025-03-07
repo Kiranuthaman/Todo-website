@@ -3,6 +3,7 @@ import { Layout, Card, Typography, Button } from 'antd';
 import AddEmploye from '../components/AddEmploye';
 import SideBar from '../components/SideBar';
 import AdminHeader from '../components/AdminHeader';
+import { getAllUsersAPI } from '../service/allApi';
 
 
 const { Header, Content } = Layout;
@@ -10,6 +11,49 @@ const { Title, Text } = Typography;
 
 const AdminDashboard = () => {
  
+
+  const [employees,setEmployees]=useState([])
+  const [manager,setManager]=useState([])
+  const getAllUsers = async () => {
+    const token = sessionStorage.getItem("token");
+  
+    if (!token) {
+      console.error("No token found, authentication required.");
+      return;
+    }
+    const reqHeader={
+      
+    "content-Type":"application/json",
+    "authorization":`Bearer ${token}`
+    }
+  
+    try {
+      const result = await getAllUsersAPI(reqHeader); // Call API function
+  
+      if (result.status === 200 && Array.isArray(result.data)) {
+        const users = result.data; // Ensure this is an array
+  
+        // Filter users based on roles
+        const employees = users.filter((user) => user.role === "Employee");
+        const managers = users.filter((user) => user.role === "Manager");
+  
+        setEmployees(employees); // Store employee list
+        setManager(managers); // Store manager list
+        console.log("Employees:", employees);
+        console.log("Managers:", managers);
+      } else {
+        console.error("Unexpected response:", result);
+      }
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
+  
+  useEffect(() => {
+    getAllUsers();
+  }, []); // Runs only once
+  
+
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
