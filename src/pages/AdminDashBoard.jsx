@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Layout, Card, Typography, Button } from 'antd';
 import AddEmploye from '../components/AddEmploye';
 import SideBar from '../components/SideBar';
-import AddManager from '../components/AddManager';
+import AdminHeader from '../components/AdminHeader';
 
 
 const { Header, Content } = Layout;
@@ -15,11 +15,8 @@ const AdminDashboard = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <SideBar />
       <Layout>
-        <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Title level={3} style={{ margin: 0 }}>Admin Dashboard</Title>
-          <Button type='primary'>Logout</Button>
-        </Header>
-
+       
+<AdminHeader/>
         <Content style={{ margin: '24px', padding: '24px', background: '#fff', borderRadius: '8px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', marginBottom: '24px' }}>
             <Card hoverable>
@@ -39,7 +36,6 @@ const AdminDashboard = () => {
           <Card style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
               <AddEmploye />
-              <AddManager/>
             </div>
           </Card>
         

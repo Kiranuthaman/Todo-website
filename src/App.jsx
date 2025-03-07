@@ -5,6 +5,7 @@ import EmployeeDashBoard from './pages/EmployeeDashBoard'
 import ManagerDashBoard from './pages/ManagerDashBoard'
 import PagenNotFound from './pages/PagenNotFound'
 import AdminDashboard from './pages/AdminDashBoard'
+import TaskStatus from './pages/TaskStatus'
 function App() {
 
 
@@ -13,6 +14,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Auth/>}/>
       <Route path='/admin' element={<AdminDashboard/>}/>
+      <Route path='/admin/status' element={<TaskStatus/>}/>
       <Route path='/manager' element={<ManagerDashBoard/>}/>
       <Route path='/employe' element={<EmployeeDashBoard/>}/>
       <Route path='/*' element={<PagenNotFound/>}/>
