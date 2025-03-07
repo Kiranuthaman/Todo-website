@@ -22,12 +22,11 @@ function SideBar() {
           Manage Users
         </Menu.Item>
         </Link>
+        <Link to={'/admin/status'}>
         <Menu.Item key="2" icon={<FileDoneOutlined />}>
           Task Status
         </Menu.Item>
-        <Menu.Item key="3" icon={<BarChartOutlined />}>
-          Assign Task
-        </Menu.Item>
+        </Link>
       </Menu>
     </Sider>
   );
