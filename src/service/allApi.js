@@ -14,6 +14,7 @@ export const getAllEmployeesAndManagersAPI = async()=>{
     return await commonApi('GET',`${serverUrl}/getAllUsers`,"","")
 }
 
+
 // to get manager for to assign to employe
 
 export const getManagerApi = async(searchKey, reqHeader)=>{
@@ -23,4 +24,5 @@ export const getManagerApi = async(searchKey, reqHeader)=>{
 // register request
 export const requestApi = async(reqBody,reqHeader)=>{
     return await commonApi ('POST', `${serverUrl}/register`,reqBody,reqHeader)
+
 }
