@@ -39,3 +39,8 @@ export const getAllTaskToAdminAPI = async(reqHeader)=>{
 export const deleteAPI = async(id)=>{
     return await commonApi('DELETE',`${serverUrl}/managerAndemployee/remove/${id}`,{},{})
 }
+
+
+export const getManagersEmployeesAPI = async(reqHeader)=>{
+    return await commonApi('GET',`${serverUrl}/getEmployees`,"",reqHeader)
+}

@@ -34,6 +34,7 @@ function Auth() {
       if (result.status === 200) {
         const { name, role } = result.data.existingUser;
         const  token  = result.data.token;
+console.log(result.data.existingUser);
 
        //store data in session storage
         sessionStorage.setItem("name", name);
@@ -49,7 +50,7 @@ function Auth() {
        
         if (role === "Admin") navigate("/admin");
         else if (role === "Manager") navigate("/manager");
-        else navigate("/employee");
+        else navigate("/employe");
       } else {
         notification.warning({ message: "Login Failed", description: result.response?.data?.message || "Try again." });
       }
@@ -64,6 +65,8 @@ function Auth() {
       });
     }
   };
+  
+  
 
   return (
     <Layout
