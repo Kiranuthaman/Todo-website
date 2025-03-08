@@ -3,7 +3,7 @@ import { Layout, Card, Typography, notification, Spin, Button } from "antd";
 import AddEmploye from "../components/AddEmploye";
 import SideBar from "../components/SideBar";
 import AdminHeader from "../components/AdminHeader";
-import {  getAllEmployeesAndManagersAPI, } from "../service/allApi";
+import {  deleteAPI, getAllEmployeesAndManagersAPI, getAllTaskToAdminAPI, } from "../service/allApi";
 import AddManager from "../components/AddManger";
 
 const { Header, Content } = Layout;
@@ -15,6 +15,7 @@ const AdminDashboard = () => {
   const [employeeCount, setEmployeeCount] = useState(0);
   const [managerCount, setManagerCount] = useState(0);
   const [loading, setLoading] = useState(true);
+const [taskCompletedCount,setTaskCompletedCount]=useState(0)
 
   // Ant Design notification function
   const openNotification = (type, message, description) => {
@@ -51,8 +52,59 @@ const AdminDashboard = () => {
     }
   };
 
+  
+const handleDelete= async(id)=>{
+
+  const token = sessionStorage.getItem("token")
+  if(token){
+
+//api call
+try{
+const result =await deleteAPI(id)
+if(result.status==200){
+  getAllEmployeesAndManagers();
+}else{
+  console.log(result.response.data);
+  
+}
+}catch(err){
+console.log(err);
+
+}
+  }
+
+}
+
+const getAllTasks = async () => {
+  const token = sessionStorage.getItem('token');
+  if (token) {
+    const reqHeader = {
+      "Content-Type": "multipart/form-data",
+      "authorization": `Bearer ${token}`
+    };
+    try {
+      const result = await getAllTaskToAdminAPI(reqHeader);
+      if (result.status === 200) {
+       
+        
+        // Count tasks with status 'Completed'
+        const completedTasks = result.data.filter(task => task.status === "Completed").length;
+        setTaskCompletedCount(completedTasks);
+        console.log(taskCompletedCount);
+        
+      } else {
+        console.error("Unexpected response:", result);
+      }
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+  }
+};
+
+
   useEffect(() => {
     getAllEmployeesAndManagers();
+    getAllTasks();
   }, []);
 
   return (
@@ -71,9 +123,9 @@ const AdminDashboard = () => {
               <Title level={4} style={{ marginBottom: 0 }}>Total Managers</Title>
               <Text>{managerCount}</Text>
             </Card>
-            <Card hoverable>
+           <Card hoverable>
               <Title level={4} style={{ marginBottom: 0 }}>Completed Tasks</Title>
-              <Text>3</Text>
+              <Text>{taskCompletedCount}</Text>
             </Card>
           </div>
 
