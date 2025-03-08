@@ -26,3 +26,7 @@ export const requestApi = async(reqBody,reqHeader)=>{
     return await commonApi ('POST', `${serverUrl}/register`,reqBody,reqHeader)
 
 }
+
+export const addTaskAPI = async(reqBody,reqHeader)=>{
+    return await commonApi('POST',`${serverUrl}/AssignTask`,reqBody,reqHeader)
+}
