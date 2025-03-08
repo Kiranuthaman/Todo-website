@@ -3,8 +3,7 @@ import SideBar from '../components/SideBar';
 import Layout, { Content } from 'antd/es/layout/layout';
 import AdminHeader from '../components/AdminHeader';
 import { Table, Tag, Card, Button, Modal, Form, Input, Select, DatePicker, message } from 'antd';
-import { addTaskAPI, getAllEmployeesAndManagersAPI } from '../service/allApi';
-
+import { addTaskAPI, getAllEmployeesAndManagersAPI, getAllTaskToAdminAPI } from '../service/allApi';
 
 const { Option } = Select;
 
@@ -12,7 +11,7 @@ function TaskStatus() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [users, setUsers] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const [taskDetails, setTaskDetails] = useState([]);
   const [taskData, setTaskData] = useState({
     title: "",
     assignedTo: "",
@@ -22,6 +21,7 @@ function TaskStatus() {
 
   useEffect(() => {
     getAllUsers();
+    getAllTasks();
   }, []);
 
   // Fetch employees and managers
@@ -36,6 +36,30 @@ function TaskStatus() {
     } catch (err) {
       console.error("Error fetching employees:", err);
     }
+  };
+
+  // Get task details
+  const getAllTasks = async () => {
+  
+      const token = sessionStorage.getItem('token')
+      if(token)
+      {
+        const reqHeader = {
+          "Content-Type":"multipart/form-data",
+          "authorization":`Bearer ${token}`
+        }
+        try {
+      const result = await getAllTaskToAdminAPI(reqHeader);
+
+      if (result.status === 200) {
+        setTaskDetails(result.data);
+      } else {
+        console.error("Unexpected response:", result);
+      }
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+  }
   };
 
   const showModal = () => {
@@ -56,14 +80,9 @@ function TaskStatus() {
         return;
       }
 
-      const reqBody = {
-        title,
-        assignedTo,
-        priority,
-        dueDate
-      };
-
+      const reqBody = { title, assignedTo, priority, dueDate };
       const token = sessionStorage.getItem("token");
+
       if (!token) {
         message.error("Authentication token is missing");
         return;
@@ -71,15 +90,13 @@ function TaskStatus() {
 
       const reqHeader = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       };
 
       const result = await addTaskAPI(reqBody, reqHeader);
       if (result.status === 200) {
-        console.log(result.status);
-        
         message.success("Task successfully added");
-        setTasks([...tasks, result.data]); // Update table with new task
+        setTaskDetails([...taskDetails, result.data]); // Update table
         handleCancel();
       } else {
         message.error(result.response.data);
@@ -100,10 +117,18 @@ function TaskStatus() {
             <Button type="primary" onClick={showModal} style={{ marginBottom: '16px' }}>
               Add Task
             </Button>
+            
+            {/* Task Table */}
             <Table
               columns={[
                 { title: 'Task Name', dataIndex: 'title', key: 'title' },
-                { title: 'Assigned To', dataIndex: 'assignedTo', key: 'assignedTo' },
+                {
+                  title: 'Assigned To',
+                  dataIndex: 'assignedTo',
+                  key: 'assignedTo',
+                  render: (assignedTo) =>
+                    users.find(user => user._id === assignedTo)?.name || "Unknown",
+                },
                 {
                   title: 'Priority',
                   dataIndex: 'priority',
@@ -111,7 +136,7 @@ function TaskStatus() {
                   render: (priority) => {
                     let color = priority === 'High' ? 'red' : priority === 'Medium' ? 'orange' : 'green';
                     return <Tag color={color}>{priority}</Tag>;
-                  }
+                  },
                 },
                 {
                   title: 'Status',
@@ -119,20 +144,24 @@ function TaskStatus() {
                   key: 'status',
                   render: (status) => {
                     let color = status === 'Completed' ? 'green' : status === 'In Progress' ? 'blue' : 'volcano';
-                    return <Tag color={color}>{status}</Tag>;
-                  }
-                }
+                    return <Tag color={color}>{status || "Pending"}</Tag>;
+                  },
+                },
+                {
+                  title: 'Due Date',
+                  dataIndex: 'dueDate',
+                  key: 'dueDate',
+                  render: (dueDate) => {
+                    return dueDate ? new Date(dueDate).toLocaleDateString('en-GB') : 'N/A';
+                  },
+                },
               ]}
-              dataSource={tasks.map((task, index) => ({
+              dataSource={taskDetails.map((task, index) => ({
                 key: index,
-                title: task.title,
-                assignedTo: users.find(user => user._id === task.assignedTo)?.name || "Unknown",
-                priority: task.priority,
-                status: task.status || "Pending"
+                ...task, // Ensures all fields are included correctly
               }))}
               pagination={{ pageSize: 5 }}
               scroll={{ x: 'max-content' }}
-              responsive
             />
           </Card>
         </Content>

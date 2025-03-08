@@ -30,3 +30,12 @@ export const requestApi = async(reqBody,reqHeader)=>{
 export const addTaskAPI = async(reqBody,reqHeader)=>{
     return await commonApi('POST',`${serverUrl}/AssignTask`,reqBody,reqHeader)
 }
+
+export const getAllTaskToAdminAPI = async(reqHeader)=>{
+    return await commonApi('GET',`${serverUrl}/getTasks`,"",reqHeader)
+}
+
+
+export const deleteAPI = async(id)=>{
+    return await commonApi('DELETE',`${serverUrl}/managerAndemployee/remove/${id}`,{},{})
+}
