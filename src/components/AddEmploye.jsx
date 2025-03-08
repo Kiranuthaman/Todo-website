@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Select } from 'antd';
-import { getManagerApi } from '../service/allApi';
+import { getManagerApi, requestApi } from '../service/allApi';
+import { ToastContainer, toast } from 'react-toastify';
 
 const { Option } = Select;
 
@@ -14,7 +15,7 @@ function AddEmployee() {
     role: "",
     assignedEmployees: "",
   });
-console.log(userDetails);
+  console.log(userDetails);
 
   const [searchKey, setSearchKey] = useState("");
   const [allManagers, setAllManagers] = useState([]);
@@ -75,15 +76,46 @@ console.log(userDetails);
     }));
   };
 
-  const handleRegister = () => {
-    console.log("User registered:", userDetails);
-    handleCancel();
+  const handleRegister = async (e) => {
+    e.preventDefault(); // Prevent form reload
+
+    const { name, email, password, role } = userDetails;
+    if (!name || !email || !password ||! role) {
+      toast.info("Fill the form completely");
+    } else {
+      try {
+        const result = await requestApi(userDetails);
+        console.log(result);
+
+        if (result.status === 200) {
+          toast.success('Registration Successful');
+
+          setUserDetails({
+            name: "",
+            email: "",
+            password: "",
+            role: "",
+            assignedEmployees: "",
+          });
+          handleCancel()
+
+
+        } else if (result.status === 406) {
+          toast.error("Email already in use");
+        } else {
+          toast.error('Something went wrong');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Server Error. Try again later.");
+      }
+    }
   };
 
   return (
     <div>
       <Button type="primary" onClick={showModal}>
-        Add Employee or Manager
+        Add Employee 
       </Button>
       <Modal
         title="Register Employee"
@@ -118,7 +150,6 @@ console.log(userDetails);
               placeholder="Select role"
               onChange={(value) => handleInputChange("role", value)}
             >
-              <Option value="Manager">Manager</Option>
               <Option value="Employee">Employee</Option>
             </Select>
           </Form.Item>
@@ -141,6 +172,7 @@ console.log(userDetails);
           )}
         </Form>
       </Modal>
+       <ToastContainer position="top-center" theme="colored" />
     </div>
   );
 }
