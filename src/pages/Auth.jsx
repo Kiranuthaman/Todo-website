@@ -32,13 +32,14 @@ function Auth() {
       const result = await loginAPI({ email, password });
 
       if (result.status === 200) {
-        const { name, role } = result.data.existingUser;
+        const { name, role,_id } = result.data.existingUser;
         const  token  = result.data.token;
 console.log(result.data.existingUser);
 
        //store data in session storage
         sessionStorage.setItem("name", name);
         sessionStorage.setItem("token", token);
+        sessionStorage.setItem("userId", _id);
        
 
         notification.success({
