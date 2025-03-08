@@ -7,7 +7,7 @@ const { Title } = Typography;
 function AdminHeader() {
   return (
     <Header style={{ background: '#fff', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Title level={3} style={{ margin: 0 }}>Admin Dashboard</Title>
+      <Title level={3} style={{ margin: 0 }}>Welcome </Title>
       <Button 
         type='primary' 
     
