@@ -41,6 +41,6 @@ export const deleteAPI = async(id)=>{
 }
 
 
-export const getManagersEmployeesAPI = async(reqHeader)=>{
-    return await commonApi('GET',`${serverUrl}/getEmployees`,"",reqHeader)
+export const getEmployeesAPI = async()=>{
+    return await commonApi('GET',`${serverUrl}/getEmployees`,"","")
 }
