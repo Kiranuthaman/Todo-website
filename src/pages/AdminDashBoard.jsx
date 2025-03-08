@@ -29,6 +29,9 @@ const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
+
+
+    
     setIsModalOpen(true);
   };
 
@@ -48,7 +51,9 @@ const AdminDashboard = () => {
       if (result.status === 200) {
         const employees = result.data.filter((emp) => emp.role === "Employee");
         const managers = result.data.filter((emp) => emp.role === "Manager");
-
+        const employeeunderManager = result.data.filter((emp) => emp.role === "Manager");
+       
+       
         setEmployee(employees);
         setManager(managers);
         setEmployeeCount(employees.length);
@@ -183,7 +188,7 @@ const AdminDashboard = () => {
                   <ul style={{ listStyleType: "none", padding: 0 }}>
                     {manager.map((mgr) => (
                       <li key={mgr._id} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
-                        <Text   onClick={showModal}>{mgr.name}</Text>
+                        <Text   onClick={showModal} >{mgr.name} </Text>
                         {/* modal */}
                         <Modal title="Employes Assigned" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                           <p>keerthi</p>
