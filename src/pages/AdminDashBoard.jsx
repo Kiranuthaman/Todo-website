@@ -185,10 +185,10 @@ const AdminDashboard = () => {
                       <li key={mgr._id} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
                         <Text   onClick={showModal}>{mgr.name}</Text>
                         {/* modal */}
-                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                          <p>Some contents...</p>
-                          <p>Some contents...</p>
-                          <p>Some contents...</p>
+                        <Modal title="Employes Assigned" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                          <p>keerthi</p>
+                          <p>Anu</p>
+                          <p>Aparna</p>
                         </Modal>
                         <Button type="link" danger onClick={() => handleDelete(mgr._id, "Manager")}>
                           Delete
