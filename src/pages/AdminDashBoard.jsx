@@ -66,22 +66,22 @@ const AdminDashboard = () => {
               <AddEmploye />
             </div>
           </Card>
-          {employee?.length>0?employee.map((employee,index)=>(
           <Card title="Employee List" style={{ marginBottom: '24px' }}>
+          {employee?.length>0?employee.map((employee,index)=>(
             <ul style={{ listStyleType: 'none', padding: 0 }}>
               <li>{employee.name}</li>
               
             </ul>
-          </Card>)):<p>not found</p>}
+          )):<p>not found</p>}</Card>
           
-
-          {manager?.length>0?manager.map((manager,index)=>(
           <Card title="Manager List">
+          {manager?.length>0?manager.map((manager,index)=>(
+         
             <ul style={{ listStyleType: 'none', padding: 0 }}>
               <li>{manager.name}</li>
              
             </ul>
-            </Card>)):<p>not found</p>}
+           )):<p>not found</p>}  </Card>
 
         </Content>
       </Layout>
