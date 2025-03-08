@@ -10,6 +10,6 @@ export const loginAPI = async(user)=>{
 
 //get users details
 
-export const getAllUsersAPI = async(reqHeader)=>{
-    return await commonApi('GET',`${serverUrl}/getAllUsers`,"",reqHeader)
+export const getAllEmployeesAndManagersAPI = async()=>{
+    return await commonApi('GET',`${serverUrl}/getAllUsers`,"","")
 }
