@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Card, Typography, notification, Spin } from "antd";
+import { Layout, Card, Typography, notification, Spin, Button } from "antd";
 import AddEmploye from "../components/AddEmploye";
 import SideBar from "../components/SideBar";
 import AdminHeader from "../components/AdminHeader";
-import { getAllEmployeesAndManagersAPI } from "../service/allApi";
+import {  getAllEmployeesAndManagersAPI, } from "../service/allApi";
+import AddManager from "../components/AddManger";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -80,6 +81,7 @@ const AdminDashboard = () => {
           <Card style={{ marginBottom: "24px" }}>
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
               <AddEmploye />
+              <AddManager />
             </div>
           </Card>
 
@@ -95,8 +97,13 @@ const AdminDashboard = () => {
               {employee.length > 0 ? (
                 <Card title="Employee List" style={{ marginBottom: "24px" }}>
                   <ul style={{ listStyleType: "none", padding: 0 }}>
-                    {employee.map((emp, index) => (
-                      <li key={index}>{emp.name}</li>
+                    {employee.map((emp) => (
+                      <li key={emp._id} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
+                        <Text>{emp.name}</Text>
+                        <Button type="link" danger onClick={() => handleDelete(emp._id, "Employee")}>
+                          Delete
+                        </Button>
+                      </li>
                     ))}
                   </ul>
                 </Card>
@@ -108,8 +115,13 @@ const AdminDashboard = () => {
               {manager.length > 0 ? (
                 <Card title="Manager List">
                   <ul style={{ listStyleType: "none", padding: 0 }}>
-                    {manager.map((mgr, index) => (
-                      <li key={index}>{mgr.name}</li>
+                    {manager.map((mgr) => (
+                      <li key={mgr._id} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0" }}>
+                        <Text>{mgr.name}</Text>
+                        <Button type="link" danger onClick={() => handleDelete(mgr._id, "Manager")}>
+                          Delete
+                        </Button>
+                      </li>
                     ))}
                   </ul>
                 </Card>
