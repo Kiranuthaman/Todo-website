@@ -14,6 +14,8 @@ const AdminDashboard = () => {
 
   const [employee,setEmployee]=useState([])
   const [manager,setManager]=useState([])
+  const [employeeCount, setEmployeeCount] = useState(0);
+const [managerCount, setManagerCount] = useState(0);
   
   const getAllEmployeesAndManagers = async () => {
     try {
@@ -25,6 +27,9 @@ const AdminDashboard = () => {
         const managers = result.data.filter(emp => emp.role === "Manager");
         setEmployee(employees);
         setManager(managers)
+setEmployeeCount(employees.length)
+setManagerCount(managers.length)
+
       } else {
         console.error("Unexpected response:", result);
       }
@@ -49,11 +54,11 @@ const AdminDashboard = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', marginBottom: '24px' }}>
             <Card hoverable>
               <Title level={4} style={{ marginBottom: 0 }}>Total Employees</Title>
-              <Text>5</Text>
+              <Text>{employeeCount}</Text>
             </Card>
             <Card hoverable>
               <Title level={4} style={{ marginBottom: 0 }}>Total Managers</Title>
-              <Text>5</Text>
+              <Text>{managerCount}</Text>
             </Card>
             <Card hoverable>
               <Title level={4} style={{ marginBottom: 0 }}>Completed Tasks</Title>
